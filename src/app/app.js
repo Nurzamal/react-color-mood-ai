@@ -4,12 +4,12 @@ import Button from 'material-ui/Button';
 import Dialog, {
   DialogTitle,
   DialogContent,
-  DialogContentText,
   DialogActions,
 } from 'material-ui/Dialog';
 import Typography from 'material-ui/Typography';
 import { withStyles } from 'material-ui/styles';
 import materialUIRoot from './materialUIRoot';
+import { SketchPicker } from 'react-color'
 
 import AppBar from './components/AppBar'
 
@@ -17,6 +17,9 @@ const styles = theme => ({
   root: {
     textAlign: 'center',
   },
+  getStarted: {
+    marginTop: '200px'
+  }
 });
 
 class App extends React.Component {
@@ -46,7 +49,7 @@ class App extends React.Component {
         <Dialog open={open} onClose={this.handleClose}>
           <DialogTitle>Get Started</DialogTitle>
           <DialogContent>
-            <DialogContentText>There is nothing yet</DialogContentText>
+            <SketchPicker />
           </DialogContent>
           <DialogActions>
             <Button color="primary" onClick={this.handleClose}>
@@ -60,7 +63,7 @@ class App extends React.Component {
         <Typography variant="subheading" gutterBottom>
           App will learn to determine color's mood based on your inputs with Machine Learning under the hood.
         </Typography>
-        <Button variant="raised" color="secondary" onClick={this.handleClick}>
+        <Button className={classes.getStarted}  variant="raised" color="secondary" onClick={this.handleClick}>
           Get Started
         </Button>
       </div>

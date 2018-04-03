@@ -39,7 +39,7 @@ const styles = theme => ({
 class TrainPage extends React.Component {
 
   render() {
-    const { classes, progress, randomColor, handleMoodClick } = this.props
+    const { classes, progress, randomColor, handleMoodClick, network, nextStepClick } = this.props
     return (
     <div className={classes.content}>
       <div className={classes.description}>
@@ -73,6 +73,11 @@ class TrainPage extends React.Component {
           </div>
         </div>
       </div>
+      { network &&
+        <Button className={classes.getStarted}  variant="raised" color="secondary" onClick={nextStepClick}>
+          next
+        </Button>
+      }
     </div>
     );
   }

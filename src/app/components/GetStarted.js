@@ -26,7 +26,7 @@ class MainPage extends React.Component {
         <Typography variant="subheading" gutterBottom>
           App will learn to determine color's mood based on your inputs with Machine Learning under the hood.
         </Typography>
-          <Button className={classes.getStarted}  variant="raised" color="secondary" onClick={this.props.getStartedClick}>
+          <Button className={classes.getStarted}  variant="raised" color="secondary" onClick={this.props.nextStepClick}>
             Get Started
           </Button>
       </div>

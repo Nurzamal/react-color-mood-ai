@@ -67,12 +67,13 @@ class MainPage extends React.Component {
     else if (newProgress === 100) this.setState({ trainingDataSet: newDataSet, progress: newProgress }, this.trainNetwork())
   }
 
-  getStartedClick = () => {
-    this.setState({ page: "train" })
+  nextStepClick = () => {
+    if (this.state.page === "getStarted") this.setState({ page: "train" })
+    if (this.state.page === "train") this.setState({ page: "results" })
   }
 
   getComponentForRender = () => {
-    if (this.state.page === "getStarted") return <GetStarted getStartedClick={this.getStartedClick}/>
+    if (this.state.page === "getStarted") return <GetStarted nextStepClick={this.nextStepClick}/>
     if (this.state.page === "train") return (
       <Train 
         in={this.state.page === "train"}
@@ -80,8 +81,10 @@ class MainPage extends React.Component {
         handleMoodClick={this.handleMoodClick}
         randomColor={this.state.randomColor}
         network={this.state.network}
+        nextStepClick={this.nextStepClick}
       />
     )
+    if (this.state.page === "results") return <div />
   }
 
   render() {    

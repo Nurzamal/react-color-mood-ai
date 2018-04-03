@@ -2,13 +2,11 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
 import MainPage from './app/pages/MainPage'
-import TrainPage from './app/pages/TrainPage'
 import registerServiceWorker from './registerServiceWorker';
 
 const Index = () => (
   <BrowserRouter>
-  <Switch>
-      <Route path="/train" component={TrainPage} />
+    <Switch>
       <Route path="/" component={MainPage} />
     </Switch>
   </BrowserRouter>

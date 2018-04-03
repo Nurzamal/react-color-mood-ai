@@ -1,46 +1,110 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
-import { Link } from 'react-router-dom'
-import Typography from 'material-ui/Typography';
+import Paper from 'material-ui/Paper';
 import { withStyles } from 'material-ui/styles';
 import materialUIRoot from '../materialUIRoot';
+import brain from 'brain.js'
+import ReactTransitionGroupPlus from 'react-transition-group-plus'
+
 
 import AppBar from '../components/AppBar'
+import GetStarted from '../components/GetStarted'
+import Train from '../components/Train'
+import Animates from '../components/AnimatedContent'
 
 const styles = theme => ({
-  root: {
+  root: theme.mixins.gutters({
     textAlign: 'center',
-  },
-  content: {
-    margin: '50px 10px'
-  },
-  getStarted: {
-    marginTop: '200px',
-    textDecoration: 'none'
-  }
+    paddingTop: 16,
+    paddingBottom: 16,
+    minHeight: '90vh',
+  }),
 });
 
 class MainPage extends React.Component {
+  state = {
+    page: 'getStarted',
+    progress: 0,
+    randomColor: { r: 0, g: 0, b: 0 },
+    trainingDataSet: [],
+    network: null
+  };
 
-  render() {
+  componentDidMount() {
+    this.getRandomRgb()
+  }
+
+  getRandomRgb = () => {
+    const randomColor = {
+      r: Math.round(Math.random()*205),
+      g: Math.round(Math.random()*205),
+      b: Math.round(Math.random()*205),
+    }
+    this.setState({ randomColor })
+  }
+
+  trainNetwork = () => {
+    const network = new brain.NeuralNetwork()
+    network.train(this.state.trainingDataSet)
+    // const result = brain.likely({r: 101, g: 164, b: 115}, network)
+    // const result1 = network.run({r: 101, g: 164, b: 115})
+    this.setState({ network })
+  }
+
+  handleMoodClick = (e) => {
+    const newDataSet = JSON.parse(JSON.stringify(this.state.trainingDataSet))
+    const newProgress = this.state.progress + 10
+    if (e.target.id === "happy") {
+      newDataSet.push({
+        input: { r: this.state.randomColor.r, g: this.state.randomColor.g, b: this.state.randomColor.b }, output: { happy: 1 }
+      })
+    } else {
+      newDataSet.push({
+        input: { r: this.state.randomColor.r, g: this.state.randomColor.g, b: this.state.randomColor.b }, output: { sad: 1 }
+      })
+    }
+    if (newProgress < 100) this.setState({ trainingDataSet: newDataSet, progress: newProgress }, this.getRandomRgb())
+    else if (newProgress === 100) this.setState({ trainingDataSet: newDataSet, progress: newProgress }, this.trainNetwork())
+  }
+
+  getStartedClick = () => {
+    this.setState({ page: "train" })
+  }
+
+  getComponentForRender = () => {
+    if (this.state.page === "getStarted") return <GetStarted getStartedClick={this.getStartedClick}/>
+    if (this.state.page === "train") return (
+      <Train 
+        in={this.state.page === "train"}
+        progress={this.state.progress}
+        handleMoodClick={this.handleMoodClick}
+        randomColor={this.state.randomColor}
+        network={this.state.network}
+      />
+    )
+  }
+
+  render() {    
     const { classes } = this.props;
-
     return (
-      <div className={classes.root}>
+      <div>
         <AppBar />
-        <div className={classes.content}>
-          <Typography variant="display1" gutterBottom>
-            React Color Mood AI
-          </Typography>
-          <Typography variant="subheading" gutterBottom>
-            App will learn to determine color's mood based on your inputs with Machine Learning under the hood.
-          </Typography>
-          <Link to="/train" style={{"text-decoration": "none"}}>
-            <Button className={classes.getStarted}  variant="raised" color="secondary">
-              Get Started
-            </Button>
-          </Link>
+        <div className={classes.root}>
+          <Paper className={classes.root} elevation={4}>
+          <ReactTransitionGroupPlus
+            transitionMode="out-in"
+            component="div"
+            className="output-panel"
+            onClick={this.handleClick}
+            >
+            <Animates
+              key={this.state.page}
+              enterDuration={0.8}
+              leaveDuration={0.3}
+              component={this.getComponentForRender()}
+            />
+          </ReactTransitionGroupPlus>
+          </Paper>
         </div>
       </div>
     );

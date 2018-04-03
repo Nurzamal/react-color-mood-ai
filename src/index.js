@@ -1,13 +1,15 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import App from './app/app'
+import MainPage from './app/pages/MainPage'
+import TrainPage from './app/pages/TrainPage'
 import registerServiceWorker from './registerServiceWorker';
 
 const Index = () => (
   <BrowserRouter>
   <Switch>
-      <Route path="/" component={App} />
+      <Route path="/train" component={TrainPage} />
+      <Route path="/" component={MainPage} />
     </Switch>
   </BrowserRouter>
 )
